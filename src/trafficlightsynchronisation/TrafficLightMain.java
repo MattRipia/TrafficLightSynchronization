@@ -11,6 +11,8 @@ public class TrafficLightMain {
         // the main jframe that the chatGUI panel connects to
         JFrame frame = new JFrame("Lights");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        // pass the TrafficLightGUI panel to the frame
         frame.getContentPane().add(new TrafficLightGUI());
         frame.pack();
         
@@ -23,5 +25,4 @@ public class TrafficLightMain {
 	frame.setVisible(true);
         frame.setResizable(false);
     }
-    
 }

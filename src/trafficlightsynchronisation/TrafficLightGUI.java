@@ -11,9 +11,9 @@ import javax.swing.Timer;
 
 public class TrafficLightGUI extends JPanel implements ActionListener
 {
-    TrafficLightModel model;
-    Timer timer;
-    JButton enableFirstLight, enableSecondLight;
+    private final TrafficLightModel model;
+    private final Timer timer;
+    private final JButton enableFirstLight, enableSecondLight;
     
     public TrafficLightGUI()
     {
@@ -21,23 +21,27 @@ public class TrafficLightGUI extends JPanel implements ActionListener
         super.setBackground(Color.WHITE);
         super.setPreferredSize(new Dimension(200,300));
         
+        // first light button
         enableFirstLight = new JButton("Enable first light!");
         enableFirstLight.setLocation(100, 100);
         enableFirstLight.setVisible(true);
         enableFirstLight.addActionListener(this);
         
+        // second light button
         enableSecondLight = new JButton("Enable second light!");
         enableSecondLight.addActionListener(this);
         enableSecondLight.setVisible(true);
         enableSecondLight.setLocation(100, 200);
         
+        // adding the buttons to the GUI
         this.add(enableFirstLight);
         this.add(enableSecondLight);
         
-        // model initialization, pass this view into the chat client so it can alter the chat windows
+        // model initialization, pass the view(this) into the model, so that the model can directly change the view.
         model = new TrafficLightModel(this);
-        timer = new Timer(10, this);
         
+        // the timer that is used to repaint my GUI every 10ms
+        timer = new Timer(10, this);
         timer.start();
     }
     
@@ -55,7 +59,8 @@ public class TrafficLightGUI extends JPanel implements ActionListener
         g.fillOval(20, 100 + size, size / 2, size / 2);
         g.fillOval(20, 100 + (size * 2), size / 2, size / 2);
         
-        switch (model.firstLight.currentState) 
+        // first lights colour
+        switch (model.getFirstLight().getCurrentState()) 
         {
             case RED:
                 g.setColor(Color.RED);
@@ -81,7 +86,8 @@ public class TrafficLightGUI extends JPanel implements ActionListener
         g.fillOval(130, 100 + size, size / 2, size / 2);
         g.fillOval(130, 100 + (size * 2), size / 2, size / 2);
         
-        switch (model.secondLight.currentState) 
+        // second lights colour
+        switch (model.getSecondLight().getCurrentState()) 
         {
             case RED:
                 g.setColor(Color.RED);
@@ -100,20 +106,25 @@ public class TrafficLightGUI extends JPanel implements ActionListener
         }
     }
     
+    // enables both buttons
     public void enableButtons(){
         enableFirstLight.setEnabled(true);
         enableSecondLight.setEnabled(true);
     }
     
+    // disables both buttons
     public void disableButtons(){
         enableFirstLight.setEnabled(false);
         enableSecondLight.setEnabled(false);
     }
 
     @Override
+    // This is the method that is called once a button is pressed, or is executed
+    // every 10ms (due to the timer above - this repaints the lights based on the current state/model)
     public void actionPerformed(ActionEvent e) 
     {
         Object source = e.getSource();
+        
         if(source == enableFirstLight)
         {
             System.out.println("changing first light!");
@@ -127,6 +138,7 @@ public class TrafficLightGUI extends JPanel implements ActionListener
             System.out.println("changed second light!");
         }
         
+        // the repaint method gets called every 10ms to represent the current state of the model
         repaint();
     }
 }
